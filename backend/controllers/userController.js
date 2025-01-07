@@ -3,7 +3,7 @@ import appointmentModel from "../models/appointmentModel.js";
 import doctorModel from "../models/doctorModel.js";
 import userModel from "../models/userModel.js";
 import jwt from "jsonwebtoken";
-import razorpay from "razorpay";
+
 
 // api to register user
 const registerUser = async (req, res) => {
