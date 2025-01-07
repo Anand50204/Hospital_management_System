@@ -1,4 +1,4 @@
-// import { doctors } from "../../frontend/src/assets/assets.js";
+
 import appointmentModel from "../models/appointmentModel.js";
 import doctorModel from "../models/doctorModel.js";
 import jwt from "jsonwebtoken";

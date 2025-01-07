@@ -1,5 +1,4 @@
-// import connectCloudinar from "../config/cloudinary";
-import { v2 as cloudinary } from "cloudinary";
+
 import doctorModel from "../models/doctorModel.js";
 import jwt from "jsonwebtoken";
 import appointmentModel from "../models/appointmentModel.js";
