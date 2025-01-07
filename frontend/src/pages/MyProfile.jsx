@@ -37,40 +37,6 @@ const MyProfile = () => {
 
     }
   }
-  // =================
-
-  // const updatUserProfileData = async () => {
-
-  //   try {
-
-  //     const formData = new FormData();
-
-  //     formData.append('name', userData.name);
-  //     formData.append('name', userData.name);
-  //     formData.append('address', JSON.stringify(userData.address));
-  //     formData.append('gender', userData.gender);
-  //     formData.append('dob', userData.dob);
-
-  //     image && formData.append('image', image);
-
-  //     console.log(formData);
-
-
-  //     const { data } = await axios.post(backendUrl + '/api/user/update-profile', formData, { headers: { token } })
-  //     if (data.success) {
-  //       toast.success(data.message);
-  //       await loadUserProfileData();
-  //       setIsEdit(false);
-  //       setImage(false);
-  //     } else {
-  //       toast.error(data.message);
-  //     }
-
-  //   } catch (error) {
-  //     console.log(error);
-  //     toast.error(error.message);
-  //   }
-  // }
 
   return userData && (
     <div className=' max-w-lg flex flex-col gap-2 text-sm'>
@@ -100,7 +66,7 @@ const MyProfile = () => {
           <p className=' font-medium'>phone:</p>
           {
             isEdit
-              ? 91+ <input className=' bg-gray-100 max-w-52 ' type="text" value={userData.phone} onChange={(e) => setUserData(prev => ({ ...prev, phone: e.target.value }))} />
+              ? <input className=' bg-gray-100 max-w-52 ' type="text" value={userData.phone} onChange={(e) => setUserData(prev => ({ ...prev, phone: e.target.value }))} />
               : <p className=' text-blue-400'>{userData.phone}</p>
           }
           <p className=' font-medium'>Address:</p>
