@@ -19,7 +19,6 @@ const DoctorContextProvider = (props) => {
             const { data } = await axios.get(backendUrl + '/api/doctor/appointment', { headers: { dToken } })
             if (data.success) {
                 setAppointments(data.appointments)
-                console.log(data.appointments);
 
             } else {
                 toast.error(data.message)
@@ -91,7 +90,7 @@ const DoctorContextProvider = (props) => {
 
             if (data.success) {
             setProfileData(data.profileData)
-                console.log(data);
+           
             } else {
                 toast.error(data.message);
             }

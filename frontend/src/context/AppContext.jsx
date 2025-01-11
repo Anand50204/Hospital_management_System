@@ -6,7 +6,7 @@ export const AppContext = createContext();
 
 const AppContextProvider = (props) => {
 
-    const currency = "$";
+    const currency = "₹. ";
     const backendUrl = "https://hospital-man-backend.onrender.com"
 
     const [doctors, setDoctors] = useState([])

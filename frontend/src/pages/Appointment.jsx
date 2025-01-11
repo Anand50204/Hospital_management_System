@@ -10,7 +10,7 @@ const Appointment = () => {
 
   const { docId } = useParams();
   const { doctors, currency, backendUrl, token, getDoctorsData } = useContext(AppContext);
-  const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SUT']
+  const daysOfWeek = [ 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SUT','SUN']
 
   const navigate = useNavigate();
 
@@ -47,11 +47,12 @@ const Appointment = () => {
         currentDate.setHours(currentDate.getHours() > 10 ? currentDate.getHours() + 1 : 10)
         currentDate.setMinutes(currentDate.getMinutes() > 30 ? 30 : 0)
       } else {
-        currentDate.setHours(10)
+        currentDate.setHours(10) 
         currentDate.setMinutes(0)
       }
 
       let timeSlote = [];
+
       while (currentDate < endTime) {
         let formattedTime = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 
@@ -59,7 +60,7 @@ const Appointment = () => {
         let month = currentDate.getMonth() + 1;
         let year = currentDate.getFullYear();
 
-        const slotDate = day + "_" + month + "_" + year
+        const slotDate = day + "/" + month + "/" + year
         const slotTime = formattedTime;
 
         const isSloteAvailable = docInfo.slots_booked[slotDate] && docInfo.slots_booked[slotDate].includes(slotTime) ? false : true
@@ -93,7 +94,7 @@ const Appointment = () => {
       let month = date.getMonth() + 1
       let year = date.getFullYear()
 
-      const slotDate = day + "_" + month + "_" + year;
+      const slotDate = day + "/" + month + "/" + year;
 
       const { data } = await axios.post(backendUrl + '/api/user/book-appointment', { docId, slotDate, slotTime }, { headers: { token } })
 
@@ -119,6 +120,7 @@ const Appointment = () => {
 
   useEffect(() => {
     getAvailableSlote();
+    scroll(0,0)
   }, [docInfo])
 
   return docInfo && (
