@@ -3,7 +3,8 @@ import appointmentModel from "../models/appointmentModel.js";
 import doctorModel from "../models/doctorModel.js";
 import userModel from "../models/userModel.js";
 import jwt from "jsonwebtoken";
-
+import bcryptjs from "bcryptjs";
+import nodemailer from "nodemailer";
 
 // api to register user
 const registerUser = async (req, res) => {
@@ -18,13 +19,18 @@ const registerUser = async (req, res) => {
         if (password.length < 6) {
             return res.json({ success: false, message: 'Enter strong Password' })
         }
+        const existUser = await userModel.findOne({ email })
+
+        if (existUser) {
+            return res.json({ success: false, message: "User Already exists Please Login" })
+        }
+        const hasePassword = await bcryptjs.hashSync(password, 10)
 
         const userData = {
             name,
             email,
-            password
+            password: hasePassword,
         }
-
         const newUser = new userModel(userData);
         const user = await newUser.save();
 
@@ -37,6 +43,131 @@ const registerUser = async (req, res) => {
         res.json({ success: false, message: error.message })
     }
 }
+
+// email veryfication 
+const emailVeryfication = async (req, res) => {
+
+    const { email } = req.body
+
+    if (!email) {
+        return res.json({ success: false, message: "Enter email" })
+    }
+
+    const VeryficationCode = Math.floor(100000 + Math.random() * 900000).toString()
+
+    const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false, // true for port 465, false for other ports
+        auth: {
+            user: "anandmaurya816@gmail.com",
+            pass: "ocmo kseq lykh bqwq",
+        },
+    });
+
+    const sendEmail = async () => {
+
+        try {
+
+            await transporter.sendMail({
+                from: '" At port Hospital" <anandmaurya816@gmail.com>', // sender address
+                to: email, // list of receivers
+                subject: "Verify Your Email Address", // Subject line
+                text: VeryficationCode, // plain text body
+                html:`<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    .email-container {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    .email-header {
+      background-color: #007bff;
+      color: #ffffff;
+      padding: 20px;
+      text-align: center;
+    }
+    .email-header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .email-body {
+      padding: 20px;
+      color: #333333;
+      line-height: 1.6;
+    }
+    .email-body p {
+      margin: 10px 0;
+    }
+    .verification-code {
+      display: inline-block;
+      font-size: 20px;
+      font-weight: bold;
+      color: #007bff;
+      background-color: #e9f7fe;
+      padding: 10px 20px;
+      border-radius: 5px;
+      margin: 10px 0;
+    }
+    .email-footer {
+      background-color: #f9f9f9;
+      padding: 10px;
+      text-align: center;
+      font-size: 12px;
+      color: #777777;
+    }
+    .email-footer a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    .email-footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="email-header">
+      <h1>Your Verification Code</h1>
+    </div>
+    <div class="email-body">
+      <p>Thank you for signing up with us/using our services. Please use the following code to verify your email address:</p>
+      <div class="verification-code">${VeryficationCode}</div>
+      <p> If you did not request this code, please ignore this email or contact our support team at <a href="#">support@prescripto.com</a>.</p>
+      <p>Best regards,<br>Prescripto</p>
+    </div>
+    <div class="email-footer">
+      <p>&copy; [Year] [Your Company Name]. All rights reserved.</p>
+      <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </div>
+  </div>
+</body>
+</html>
+`, // html body
+            });
+
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
+
+    sendEmail();
+
+    res.json({ success: true, VeryficationCode })
+}
+
 
 // api for user Login
 const userLogin = async (req, res) => {
@@ -51,7 +182,7 @@ const userLogin = async (req, res) => {
             return res.json({ success: false, message: 'User dose not Exist' })
         }
 
-        const isMatch = password == user.password
+        const isMatch = await bcryptjs.compareSync(password, user.password)
         if (isMatch) {
             const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
             res.json({ success: true, token })
@@ -86,7 +217,7 @@ const getProfile = async (req, res) => {
 const UpdatProfile = async (req, res) => {
     try {
 
-        const { userId, name, phone, address,dob, gender } = req.body;
+        const { userId, name, phone, address, dob, gender } = req.body;
         // const imageFile = req.body;
 
         // if (!name || !phone || !gender) {
@@ -194,7 +325,7 @@ const cancelAppointment = async (req, res) => {
 
         const { docId, slotDate, slotTime } = appointmentData;
 
-        const doctorData = await doctorModel.findById( docId )
+        const doctorData = await doctorModel.findById(docId)
 
         let slots_booked = doctorData.slots_booked
 
@@ -210,14 +341,5 @@ const cancelAppointment = async (req, res) => {
     }
 }
 
-// Api to make payment of appointment using razorepay
 
-// const razorPayInstance = new razorpay({
-//     key_id:"",
-//     kew_secret:""
-// })
-// const paymentRazorPay = async (req,res)=>{
-
-// }
-
-export { registerUser, userLogin, getProfile, UpdatProfile, bookAppointment, listAppointment ,cancelAppointment}
+export { registerUser, userLogin, getProfile, UpdatProfile, bookAppointment, listAppointment, emailVeryfication, cancelAppointment }

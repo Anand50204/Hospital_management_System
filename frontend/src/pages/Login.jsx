@@ -4,16 +4,17 @@ import { AppContext } from '../context/AppContext';
 import axios from 'axios'
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
+
 const Login = () => {
 
-  const { backendUrl, token, setToken } = useContext(AppContext);
+  const { backendUrl, token, setToken,setVerifiCode ,email, setEmail} = useContext(AppContext);
 
   const navigate = useNavigate();
 
   const [state, setState] = useState('Sign Up');
-  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
+
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -22,8 +23,13 @@ const Login = () => {
       if (state === 'Sign Up') {
         const { data } = await axios.post(backendUrl + '/api/user/register', { name, email, password })
         if (data.success) {
+          const verify = await axios.post(backendUrl + '/api/user/veryfication',{email})
+          if(verify.data.success){
+            setVerifiCode(verify.data.VeryficationCode);
+          }
           localStorage.setItem('token', data.token);
           setToken(data.token);
+          navigate('/verification')
         } else {
           toast.error(data.message)
         }
@@ -63,7 +69,6 @@ const Login = () => {
             </div>
             : <div></div>
         }
-
         <div className=' w-full'>
           <p>Email</p>
           <input className=' border border-zinc-300 rounded w-full p-2 mt-1' type="email" onChange={(e) => setEmail(e.target.value)} value={email} />
