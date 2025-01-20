@@ -13,7 +13,7 @@ const AdminContextProvider = (props) => {
 
     // const backendUrl = import.meta.env.BACKEND_URL;
 
-    const backendUrl = "https://hospital-man-backend.onrender.com"
+    const backendUrl = "https://prescripto-bck.onrender.com"
 
     const getAllDoctors = async () => {
 
