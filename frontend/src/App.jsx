@@ -13,6 +13,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 // import Contact from './pages/Contact'
 import Verification from './pages/Verification'
+import Formate from './pages/Formate'
 
 const App = () => {
   return (
@@ -30,6 +31,7 @@ const App = () => {
         <Route path='/my-appointments' element={<MyAppointments />} />
         <Route path='/appointment/:docId' element={<Appointment />} />
         <Route path='/verification' element={<Verification/>} />
+        <Route path='/formate' element={<Formate/>} />
       </Routes>
       <Footer />
     </div>

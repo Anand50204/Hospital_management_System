@@ -8,23 +8,21 @@ import userModel from "../models/userModel.js";
 
 const addDoctor = async (req, res) => {
     try {
-        const { name, email, password, speciality, degree, experience, about, fees, address } = req.body;
-        const imageFile = "imagr1312"
-
+        const { name, email , password, speciality, degree, experience, about, fees, address } = req.body;
+        let image_filename = `${req.file.filename}`;
+        
         if (!name || !email || !password || !speciality || !degree || !experience || !about || !fees || !address) {
             return res.json({ success: false, message: "Missing Details" })
         }
         if (password.length < 8) {
             return res.json({ success: false, message: "Enter strong password" })
-
         }
-        // const imageUploder = await cloudinary.uploader.upload(imageFile.path, { resource_type: "image" })
 
-        // const imageUrl = imageUploder.secure_url;
+        
         const doctorData = {
             name,
             email,
-            image: imageFile,
+            image: image_filename,
             password,
             speciality,
             degree,
@@ -42,9 +40,10 @@ const addDoctor = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: error.message })
-
     }
 }
+
+
 
 //API for admin Login
 
@@ -140,13 +139,13 @@ const adminDashBoard = async (req, res) => {
             doctors: doctors.length,
             appointments: appointments.length,
             users: users.length,
-            latestAppointments:appointments.reverse().slice(0,5)
+            latestAppointments: appointments.reverse().slice(0, 5)
         }
-        res.json({success:true,dashData})
+        res.json({ success: true, dashData })
 
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: error.message })
     }
 }
-export { addDoctor, loginAdmin, AllDoctors, appointmentsAdmin, AppointmentCancel,adminDashBoard }
+export { addDoctor, loginAdmin, AllDoctors, appointmentsAdmin, AppointmentCancel, adminDashBoard }

@@ -13,7 +13,7 @@ const AdminContextProvider = (props) => {
 
     // const backendUrl = import.meta.env.BACKEND_URL;
 
-    const backendUrl = "https://prescripto-bck.onrender.com"
+    const backendUrl = "http://localhost:4000"
 
     const getAllDoctors = async () => {
 
@@ -22,7 +22,6 @@ const AdminContextProvider = (props) => {
             const { data } = await axios.post(backendUrl + '/api/admin/all-doctors', {}, { headers: { aToken } })
             if (data.success) {
                 setDoctors(data.doctors);
-                console.log(data.doctors);
 
             } else {
                 toast.error(data.message)
@@ -55,7 +54,6 @@ const AdminContextProvider = (props) => {
             const { data } = await axios.get(backendUrl + '/api/admin/appointments', { headers: { aToken } })
             if (data.success) {
                 setAppointments(data.appointments);
-                console.log(data.appointments);
 
             } else {
                 toast.error(data.error)
@@ -89,7 +87,6 @@ const AdminContextProvider = (props) => {
             const {data} = await axios.get(backendUrl + '/api/admin/dashboard',{headers:{aToken}})
             if(data.success){
                 setAdminDashData(data.dashData);
-                console.log(data.dashData);
                 
             }else{
                 toast.error(data.message);

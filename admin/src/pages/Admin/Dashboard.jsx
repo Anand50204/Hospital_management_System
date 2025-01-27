@@ -4,7 +4,7 @@ import { assets } from "../../assets/assets";
 
 const Dashboard = () => {
 
-  const { adminDashData, aToken, getDashData, cancelAppointment } = useContext(AdminContext);
+  const { adminDashData, aToken, getDashData} = useContext(AdminContext);
 
   useEffect(() => {
     if (aToken) {
@@ -40,14 +40,14 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className=' bg-white '>
+      {/* <div className=' bg-white '>
 
         <div className=' flex items-center gap-2.5 px-4 py-4 mt-10 rounded-t border'>
           <img src={assets.list_icon} alt="" />
           <p className=' font-semibold'>Latest Booking</p>
         </div>
         <div className=' pt-4 border border-t-0'>
-          {/* {
+          {
             adminDashData.latestAppointments.map((item, index) => (
               <div className=' flex items-center px-6 py-3 gap-3 hover:bg-gray-100' key={index}>
                 <img className=' rounded-full w-10' src={item.docData.image} alt="" />
@@ -63,10 +63,10 @@ const Dashboard = () => {
 
               </div>
             ))
-          } */}
+          }
 
         </div>
-      </div>
+      </div> */}
 
     </div>
   )

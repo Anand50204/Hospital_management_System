@@ -5,8 +5,8 @@ import { assets } from "../../assets/assets";
 
 const AllApointment = () => {
 
-  const { aToken, appointments, getAllAppointments,cancelAppointment } = useContext(AdminContext);
-  const {calculateAge,currency} = useContext(AppContext);
+  const { aToken, appointments, getAllAppointments, cancelAppointment, backendUrl } = useContext(AdminContext);
+  const { calculateAge, currency } = useContext(AppContext);
 
   useEffect(() => {
     if (aToken) {
@@ -28,23 +28,33 @@ const AllApointment = () => {
           <p>Fees</p>
           <p>Actions</p>
         </div>
-        {
-          appointments.map((item, index) => (
+        {appointments == 0
+          ? <div className="flex space-x-2 justify-center mt-5">
+            <div className="w-4 h-4 bg-primary rounded-full animate-bounce"></div>
+            <div className="w-4 h-4 bg-primary rounded-full animate-bounce delay-150"></div>
+            <div className="w-4 h-4 bg-primary rounded-full animate-bounce delay-300"></div>
+          </div>
+
+          : appointments.map((item, index) => (
             <div className=' flex flex-wrap justify-between max-sm:gap-2 sm:grid sm:grid-cols-[0.5fr_3fr_1fr_3fr_3fr_1fr_1fr] items-center text-gray-500 py-3 px-6 border-b hover: bg-gray-50' key={index}>
               <p className=' max-sm:hidden'>{index + 1}</p>
               <p>{item.userData.name}</p>
               <p className=' max-sm:hidden'>{calculateAge(item.userData.dob)}</p>
               <p>{item.slotDate} & {item.slotTime}</p>
               <div className=' flex items-center gap-2'>
-                <img className=' w-8 rounded-full bg-gray-200' src={item.docData.image} alt="" /> <p>{item.docData.name}</p>
+                <img className=' w-8 rounded-full bg-gray-200' src={backendUrl + '/images/' + item.docData.image} alt="" /> <p>{item.docData.name}</p>
               </div>
               <p>{currency}{item.amount}</p>
               {
                 item.cancelled
-                ? <p className=' text-red-400 text-xs font-medium'>Cancelled</p>
-                : <img onClick={()=>cancelAppointment(item._id)} className=' w-10 cursor-pointer' src={assets.cancel_icon} alt="" />
+                  ? <p className=' text-red-400 text-xs font-medium '>Cancelled</p>
+                  : item.isCompleted
+                    ? <p className=' text-green-500 text-xs font-medium'>Completed</p>
+                    : <div className=' flex'>
+                      <img onClick={() => cancelAppointment(item._id)} className=' w-10 cursor-pointer' src={assets.cancel_icon} alt="" />
+                    </div>
               }
-              
+
             </div>
           ))
         }

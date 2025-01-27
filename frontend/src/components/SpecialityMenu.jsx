@@ -1,10 +1,9 @@
 import React from 'react'
 import { specialityData } from "../assets/assets";
-import { Link, useNavigate } from 'react-router-dom';
-// to={`/doctores/${item.speciality}`}
+import { Link} from 'react-router-dom';
+
 const SpecialityMenu = () => {
 
-    const Navigate = useNavigate();
     return (
         <div id='speciality' className=' flex flex-col items-center gap-4 py-16 text-gray-800'>
             <h1 className=' text-3xl font-medium'>Find by Speciality</h1>

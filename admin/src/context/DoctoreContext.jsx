@@ -6,7 +6,7 @@ export const DoctorContext = createContext();
 
 const DoctorContextProvider = (props) => {
 
-    const backendUrl = "https://prescripto-bck.onrender.com";
+    const backendUrl = "http://localhost:4000";
 
     const [dToken, setDToken] = useState(localStorage.getItem('dToken') ? localStorage.getItem('dToken') : "");
     const [appointments, setAppointments] = useState([]);
@@ -37,6 +37,7 @@ const DoctorContextProvider = (props) => {
             if (data.success) {
                 toast.success(data.message);
                 getAppointment()
+                getDashData()
             } else {
                 toast.error(data.message);
             }
@@ -54,6 +55,7 @@ const DoctorContextProvider = (props) => {
             if (data.success) {
                 toast.success(data.message);
                 getAppointment()
+                getDashData()
             } else {
                 toast.error(data.message);
             }

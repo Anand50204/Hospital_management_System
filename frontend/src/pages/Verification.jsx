@@ -1,20 +1,17 @@
 import React, { useContext, useState } from 'react'
 import { AppContext } from '../context/AppContext';
-import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 
 const Verification = () => {
 
-    const { email,setEmail, verifiCode, setVerifiCode,backendUrl } = useContext(AppContext)
+    const { email, setEmail, verifiCode, setVerifiCode, token, backendUrl, navigate } = useContext(AppContext)
 
     const [otp, setOtp] = useState(new Array(6).fill(''));
 
-    const navigate = useNavigate();
-
     const resendOtp = async () => {
-        
+
         const verify = await axios.post(backendUrl + '/api/user/veryfication', { email })
-        
+
         if (verify.data.success) {
             setVerifiCode(verify.data.VeryficationCode);
             setOtp(new Array(6).fill(''))
@@ -24,13 +21,20 @@ const Verification = () => {
     const Emailverificatin = () => {
 
         const isMatch = verifiCode == otp.join('');
-        if (isMatch) {
-            setEmail('')
-            navigate('/')
+        console.log(otp.join(""));
 
-        }else{
-            alert('OTP Not Match')
+        if (isMatch) {
+            if (token) {
+                setEmail('')
+                navigate('/')
+            } else {
+                navigate('/formate')
+            }
+
+        } else {
+            alert("Enter valid OTP")
         }
+
     }
 
     const handelChange = (e, index) => {
@@ -46,10 +50,10 @@ const Verification = () => {
         }
     }
 
-    return email ? (
-        <div className=' min-h-[80vh] flex items-center'>
+    return email
+        ? (<div className=' min-h-[80vh] flex items-center'>
             <div className=' flex flex-col gap-3 m-auto items-start p-8 min-w-[340px] sm:min-w-96 rounded-xl text-zinc-600 text-sm shadow-lg'>
-                <h3>{email} Verification Code send</h3>
+                <h3>{email} Verification Code Send</h3>
                 <div className=' w-[70%] m-6 flex gap-3'>
                     {
                         otp.map((item, index) => {
@@ -69,8 +73,8 @@ const Verification = () => {
             </div>
 
         </div>
-    )
-    : navigate('/login')
+        )
+        : navigate('/login')
 }
 
 export default Verification

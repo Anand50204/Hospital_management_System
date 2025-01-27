@@ -5,7 +5,7 @@ import { AppContext } from '../../context/AppContext';
 
 const DoctoreDashBoard = () => {
 
-  const { dashData, getDashData, dToken, completAppointment, cancelAppointment } = useContext(DoctorContext);
+  const { dashData, getDashData, dToken, completAppointment, backendUrl, cancelAppointment } = useContext(DoctorContext);
   const { currency } = useContext(AppContext);
 
   useEffect(() => {
@@ -15,7 +15,7 @@ const DoctoreDashBoard = () => {
 
   return dashData && (
     <div>
-      <div className=' flex flex-wrap gap-3'>
+      <div className=' flex flex-wrap gap-3 ml-10 mt-5'>
         <div className=' flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all'>
           <img className=' w-14' src={assets.earning_icon} alt="" />
           <div>
@@ -31,17 +31,9 @@ const DoctoreDashBoard = () => {
             <p className=' text-gray-400'>Appointments</p>
           </div>
         </div>
-
-        <div className=' flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all'>
-          <img className=' w-14' src={assets.patients_icon} alt="" />
-          <div>
-            <p className=' text-xl font-semibold text-gray-600'>{dashData.users}</p>
-            <p className=' text-gray-400'>Patients</p>
-          </div>
-        </div>
       </div>
 
-      <div className=' bg-white '>
+      <div className=' bg-white ml-10 '>
 
         <div className=' flex items-center gap-2.5 px-4 py-4 mt-10 rounded-t border'>
           <img src={assets.list_icon} alt="" />
@@ -51,7 +43,7 @@ const DoctoreDashBoard = () => {
           {
             dashData.latestAppointments.map((item, index) => (
               <div className=' flex items-center px-6 py-3 gap-3 hover:bg-gray-100' key={index}>
-                <img className=' rounded-full w-10' src={item.docData.image} alt="" />
+                <img className=' rounded-full w-10' src={backendUrl + '/images/' + item.docData.image} alt="" />
                 <div className=' flex-1 text-sm'>
                   <p className=' text-gray-800 font-medium'>{item.docData.name}</p>
                   <p className=' text-gray-600'>{item.slotDate}</p>

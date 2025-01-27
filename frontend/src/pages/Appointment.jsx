@@ -9,10 +9,9 @@ import axios from 'axios';
 const Appointment = () => {
 
   const { docId } = useParams();
-  const { doctors, currency, backendUrl, token, getDoctorsData } = useContext(AppContext);
-  const daysOfWeek = [ 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SUT','SUN']
+  const { doctors, setState, currency, backendUrl, token, getDoctorsData,navigate } = useContext(AppContext);
+  const daysOfWeek = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SUT', 'SUN']
 
-  const navigate = useNavigate();
 
   const [docInfo, setDocInfo] = useState(null);
   const [docSlots, setDocSlots] = useState([]);
@@ -47,7 +46,7 @@ const Appointment = () => {
         currentDate.setHours(currentDate.getHours() > 10 ? currentDate.getHours() + 1 : 10)
         currentDate.setMinutes(currentDate.getMinutes() > 30 ? 30 : 0)
       } else {
-        currentDate.setHours(10) 
+        currentDate.setHours(10)
         currentDate.setMinutes(0)
       }
 
@@ -84,6 +83,8 @@ const Appointment = () => {
 
     if (!token) {
       toast.warn('Login to book appointment')
+      setState("Login")
+      scroll(0,0)
       return navigate('/login')
     }
 
@@ -120,7 +121,7 @@ const Appointment = () => {
 
   useEffect(() => {
     getAvailableSlote();
-    scroll(0,0)
+    scroll(0, 0)
   }, [docInfo])
 
   return docInfo && (
@@ -128,7 +129,7 @@ const Appointment = () => {
       {/* ----------Doctor Details----------- */}
       <div className=' flex flex-col sm:flex-row gap-4'>
         <div>
-          <img className=' bg-primary w-full sm:max-w-72 rounded-lg' src={docInfo.image} alt="" />
+          <img className=' bg-primary w-full sm:max-w-72 rounded-lg' src={backendUrl+'/images/'+docInfo.image} alt="" />
         </div>
 
         <div className=' flex-1 border border-gray-400 rounded-lg px-8 py-7 bg-white mx-2 sm:mx-0 mt-[-80px] sm:mt-0'>

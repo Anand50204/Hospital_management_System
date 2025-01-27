@@ -3,18 +3,26 @@ import { useState } from 'react'
 import { AppContext } from '../context/AppContext';
 import axios from 'axios'
 import { toast } from 'react-toastify';
-import { useNavigate } from "react-router-dom";
 
 const Login = () => {
 
-  const { backendUrl, token, setToken,setVerifiCode ,email, setEmail} = useContext(AppContext);
+  const { backendUrl, token, setToken, setVerifiCode, email, setEmail, state, setState,navigate } = useContext(AppContext);
 
-  const navigate = useNavigate();
-
-  const [state, setState] = useState('Sign Up');
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
 
+  const handelVerification = async () => {
+
+    if (email) {
+      const verify = await axios.post(backendUrl + '/api/user/veryfication', { email })
+      if (verify.data.success) {
+        setVerifiCode(verify.data.VeryficationCode);
+        navigate('/verification')
+      }
+    } else {
+      alert("Please Enter Email")
+    }
+  }
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -23,8 +31,8 @@ const Login = () => {
       if (state === 'Sign Up') {
         const { data } = await axios.post(backendUrl + '/api/user/register', { name, email, password })
         if (data.success) {
-          const verify = await axios.post(backendUrl + '/api/user/veryfication',{email})
-          if(verify.data.success){
+          const verify = await axios.post(backendUrl + '/api/user/veryfication', { email })
+          if (verify.data.success) {
             setVerifiCode(verify.data.VeryficationCode);
           }
           localStorage.setItem('token', data.token);
@@ -39,6 +47,7 @@ const Login = () => {
         if (data.success) {
           localStorage.setItem('token', data.token);
           setToken(data.token);
+          setEmail('')
         } else {
           toast.error(data.message)
         }
@@ -76,6 +85,9 @@ const Login = () => {
         <div className=' w-full'>
           <p>Password</p>
           <input className=' border border-zinc-300 rounded w-full p-2 mt-1' type="password" onChange={(e) => setPassword(e.target.value)} value={password} />
+          {
+            state == 'Sign Up' ? <></> : <p onClick={handelVerification} className=' text-primary cursor-pointer mt-1'>Forget Password ?</p>
+          }
         </div>
         <button type='submit' className=' bg-primary text-white w-full py-2 rounded-md text-base '>{state === 'Sign Up' ? "Create Account" : "Login"}</button>
         {

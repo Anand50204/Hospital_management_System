@@ -49,8 +49,10 @@ const emailVeryfication = async (req, res) => {
 
     const { email } = req.body
 
-    if (!email) {
-        return res.json({ success: false, message: "Enter email" })
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+        return res.json({ success: false, message: 'User dose not Exist' })
     }
 
     const VeryficationCode = Math.floor(100000 + Math.random() * 900000).toString()
@@ -74,7 +76,7 @@ const emailVeryfication = async (req, res) => {
                 to: email, // list of receivers
                 subject: "Verify Your Email Address", // Subject line
                 text: VeryficationCode, // plain text body
-                html:`<!DOCTYPE html>
+                html: `<!DOCTYPE html>
 <html>
 <head>
   <style>
@@ -154,7 +156,8 @@ const emailVeryfication = async (req, res) => {
   </div>
 </body>
 </html>
-`, // html body
+`,
+
             });
 
         } catch (error) {
@@ -166,6 +169,34 @@ const emailVeryfication = async (req, res) => {
     sendEmail();
 
     res.json({ success: true, VeryficationCode })
+}
+// pssword reser
+
+const resetUserPassword = async (req, res) => {
+    try {
+
+        const { newPassword, email } = req.body;
+
+        const user = await userModel.findOne({ email });
+
+        if (!user) {
+            return res.json({ success: false, message: 'User dose not Exist' })
+        }
+
+        if (newPassword.length < 6) {
+            return res.json({ success: false, message: "Please enter strong password" })
+        }
+
+        const password = await bcryptjs.hashSync(newPassword, 10)
+
+        await userModel.findByIdAndUpdate(user._id,{password})
+
+        res.json({ success: true, message: "Password Updated" })
+
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: error.message })
+    }
 }
 
 
@@ -187,7 +218,7 @@ const userLogin = async (req, res) => {
             const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
             res.json({ success: true, token })
         } else {
-            res.json({ success: false, message: "Invalid credentials" })
+            res.json({ success: false, message: "Invalid password" })
         }
 
     } catch (error) {
@@ -342,4 +373,4 @@ const cancelAppointment = async (req, res) => {
 }
 
 
-export { registerUser, userLogin, getProfile, UpdatProfile, bookAppointment, listAppointment, emailVeryfication, cancelAppointment }
+export { registerUser, userLogin, getProfile, UpdatProfile, bookAppointment, listAppointment, emailVeryfication, cancelAppointment,resetUserPassword }

@@ -17,6 +17,7 @@ app.use(express.json());
 app.use(cors());
 
 // api end points
+app.use("/images",express.static('uploads'));
 app.use('/api/admin',adminRouter);
 app.use('/api/doctor',doctorRouter);
 app.use('/api/user',userRouter);
