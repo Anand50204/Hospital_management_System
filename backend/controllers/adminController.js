@@ -8,9 +8,8 @@ import userModel from "../models/userModel.js";
 
 const addDoctor = async (req, res) => {
     try {
-        const { name, email , password, speciality, degree, experience, about, fees, address } = req.body;
-        let image_filename = `${req.file.filename}`;
-        
+        const { name, email, password, speciality, degree, experience, about, fees, address, image } = req.body;
+
         if (!name || !email || !password || !speciality || !degree || !experience || !about || !fees || !address) {
             return res.json({ success: false, message: "Missing Details" })
         }
@@ -18,11 +17,10 @@ const addDoctor = async (req, res) => {
             return res.json({ success: false, message: "Enter strong password" })
         }
 
-        
         const doctorData = {
             name,
             email,
-            image: image_filename,
+            image,
             password,
             speciality,
             degree,
@@ -42,7 +40,6 @@ const addDoctor = async (req, res) => {
         res.json({ success: false, message: error.message })
     }
 }
-
 
 
 //API for admin Login

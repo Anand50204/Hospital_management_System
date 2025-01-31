@@ -40,8 +40,6 @@ const AddDoctore = () => {
       formData.append('speciality', speciality);
       formData.append('degree', degree);
       formData.append('address', JSON.stringify({ line1: address1, line2: address2 }));
-      
-
 
       const { data } = await axios.post(backendUrl + '/api/admin/add-doctor', formData, { headers: { aToken } })
 
@@ -57,7 +55,6 @@ const AddDoctore = () => {
         setFees('')
         setName('')
         SetPassword('')
-
       } else {
         toast.error(data.message)
       }
@@ -68,7 +65,6 @@ const AddDoctore = () => {
 
     }
   }
-  
 
   return (
     <form onSubmit={onSunmitHandler} className=' m-5 w-full '>

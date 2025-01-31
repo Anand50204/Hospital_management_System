@@ -3,7 +3,7 @@ import { AdminContext } from '../../context/AdminContext'
 
 const DoctoreList = () => {
 
-  const { doctors, aToken, getAllDoctors, changeAvailability,backendUrl } = useContext(AdminContext);
+  const { doctors, aToken, getAllDoctors, changeAvailability } = useContext(AdminContext);
 
   useEffect(() => {
     if (aToken) {
@@ -17,15 +17,15 @@ const DoctoreList = () => {
 
       <div className=' w-full flex flex-wrap gap-4 pt-5 gap-y-6' >
         {doctors == 0
-          ? <div class="flex space-x-2 justify-center">
-            <div class="w-4 h-4 bg-primary rounded-full animate-bounce"></div>
-            <div class="w-4 h-4 bg-primary rounded-full animate-bounce delay-150"></div>
-            <div class="w-4 h-4 bg-primary rounded-full animate-bounce delay-300"></div>
+          ? <div className="flex space-x-2 justify-center">
+            <div className="w-4 h-4 bg-primary rounded-full animate-bounce"></div>
+            <div className="w-4 h-4 bg-primary rounded-full animate-bounce delay-150"></div>
+            <div className="w-4 h-4 bg-primary rounded-full animate-bounce delay-300"></div>
           </div>
 
           : doctors.map((item, index) => (
             <div className=' border border-indigo-200 rounded-xl max-w-56 overflow-hidden cursor-pointer group' key={index}>
-              <img className=' bg-indigo-50 group-hover:bg-primary transition-all duration-500' src={backendUrl+'/images/'+item.image} alt="" />
+              <img className=' bg-indigo-50 group-hover:bg-primary transition-all duration-500' src={item.image} alt="" />
               <div className=' p-4'>
                 <p className=' text-neutral-800 text-lg font-medium'>{item.name}</p>
                 <p className=' text-zinc-600 text-sm'>{item.speciality}</p>

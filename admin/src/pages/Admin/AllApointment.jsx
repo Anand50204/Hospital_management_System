@@ -5,7 +5,7 @@ import { assets } from "../../assets/assets";
 
 const AllApointment = () => {
 
-  const { aToken, appointments, getAllAppointments, cancelAppointment, backendUrl } = useContext(AdminContext);
+  const { aToken, appointments, getAllAppointments, cancelAppointment } = useContext(AdminContext);
   const { calculateAge, currency } = useContext(AppContext);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ const AllApointment = () => {
               <p className=' max-sm:hidden'>{calculateAge(item.userData.dob)}</p>
               <p>{item.slotDate} & {item.slotTime}</p>
               <div className=' flex items-center gap-2'>
-                <img className=' w-8 rounded-full bg-gray-200' src={backendUrl + '/images/' + item.docData.image} alt="" /> <p>{item.docData.name}</p>
+                <img className=' w-8 rounded-full bg-gray-200' src={item.docData.image} alt="" /> <p>{item.docData.name}</p>
               </div>
               <p>{currency}{item.amount}</p>
               {

@@ -3,7 +3,7 @@ import { AppContext } from '../context/AppContext'
 
 const RelatedDoctors = ({docId,speciality}) => {
 
-const {doctors,backendUrl,navigate} = useContext(AppContext);
+const {doctors,navigate} = useContext(AppContext);
 
 const [relDocs,setRelDocs] = useState([]);
 
@@ -21,7 +21,7 @@ useEffect(()=>{
             <div className=' w-full grid grid-cols-auto gap-4 pt-5 gap-y-6 px-3 sm:px-0'>
                 {relDocs.slice(0, 5).map((item, index) => (
                     <div onClick={()=>{navigate(`/appointment/${item._id}`); scrollTo(0,0)}} className=' border border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500' key={index}>
-                        <img className=' bg-blue-50' src={backendUrl+'/images/'+item.image} alt="" />
+                        <img className=' bg-blue-50' src={item.image} alt="" />
                         <div className=' p-4'>
                             {
                                 item.available
